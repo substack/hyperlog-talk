@@ -31,7 +31,8 @@ var level = require('level')
 var hyperlog = require('hyperlog')
 var level = require('level')
 
-var log = hyperlog(level('/tmp/log.db'), { valueEncoding: 'json' })
+var log = hyperlog(level('/tmp/log.db'),
+  { valueEncoding: 'json' })
 ```
 
 ---
@@ -41,7 +42,8 @@ var log = hyperlog(level('/tmp/log.db'), { valueEncoding: 'json' })
 var hyperlog = require('hyperlog')
 var level = require('level')
 
-var log = hyperlog(level('/tmp/log.db'), { valueEncoding: 'json' })
+var log = hyperlog(level('/tmp/log.db'),
+  { valueEncoding: 'json' })
 
 var value = process.argv[2]
 var prev = process.argv.slice(3)
@@ -60,7 +62,8 @@ to list out all documents:
 var hyperlog = require('hyperlog')
 var level = require('level')
 
-var log = hyperlog(level('/tmp/log.db'), { valueEncoding: 'json' })
+var log = hyperlog(level('/tmp/log.db'),
+  { valueEncoding: 'json' })
 log.createReadStream().on('data', console.log)
 ```
 
@@ -73,14 +76,17 @@ p2p sync!
 var hyperlog = require('hyperlog')
 var level = require('level')
 
-var log = hyperlog(level('/tmp/log.db'), { valueEncoding: 'json' })
-process.stdin.pipe(log.replicate()).pipe(process.stdout)
+var log = hyperlog(level('/tmp/log.db'),
+  { valueEncoding: 'json' })
+process.stdin.pipe(log.replicate())
+  .pipe(process.stdout)
 ```
 
 ---
 # dupsh
 
-you can use `npm install -g dupsh` to test replication over stdin/stdout
+you can use `npm install -g dupsh` to test
+replication over stdin/stdout
 
 ```
 $ dupsh CMDA CMDB
@@ -95,13 +101,15 @@ and pipes CMDB's stdout into CMDA's stdin
 speaking a symmetric p2p protocol over stdout/stdin
 
 ```
-$ dupsh 'node kv.js sync -d /tmp/a' 'node kv.js sync -d /tmp/b'
+$ dupsh 'node kv.js sync -d /tmp/a' \
+  'node kv.js sync -d /tmp/b'
 ```
 
 ---
 # dupsh
 
-swap either one for another command that speaks stdin/stdout
+swap either one for another command that
+speaks stdin/stdout
 
 ```
 $ dupsh 'node kv.js sync -d /tmp/a' 'nc -l 5000'
@@ -110,10 +118,12 @@ $ dupsh 'node kv.js sync -d /tmp/a' 'nc -l 5000'
 ---
 # dupsh
 
-swap either one for another command that speaks stdin/stdout
+swap either one for another command that
+speaks stdin/stdout
 
 ```
-$ dupsh 'node kv.js sync -d /tmp/a' 'nc localhost 5000'
+$ dupsh 'node kv.js sync -d /tmp/a' \
+  'nc localhost 5000'
 ```
 
 ---
@@ -121,7 +131,8 @@ $ dupsh 'node kv.js sync -d /tmp/a' 'nc localhost 5000'
 
 a log is the source of truth
 
-materialized views create indexes derived from the log data
+materialized views create indexes
+derived from the log data
 
 ---
 # hyperlog-index
@@ -135,7 +146,8 @@ var dex = indexer({
   log: log,
   db: sub(idb, 'i'),
   map: function (row, next) {
-    // ... call next() after you've stored some data...
+    // ... call next() after you've
+    // stored some data...
   }
 })
 ```
@@ -180,7 +192,8 @@ var kv = hyperkv({
 ``` js
 dex.ready(function () {
   // here the log is fully "caught up"
-  // so you can answer questions about the up-to-date log
+  // so you can answer questions about
+  // the up-to-date log
 })
 ```
 
@@ -191,7 +204,13 @@ dex.ready(function () {
 $ rm -rf db/index
 ```
 
-and the logs will automatically catch up with the new logic!
+and the logs will automatically catch
+up with the new logic!
+
+---
+# DEMO
+
+p2p command-line key/value store
 
 ---
 # some things I've built with hyperlogs
